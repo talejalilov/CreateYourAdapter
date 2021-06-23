@@ -25,22 +25,48 @@ public class MyAdapter extends ArrayAdapter<String> {
         this.countryImage = country_image;
     }
 
+   public class ViewPlaceHolder{
+        ImageView image;
+        TextView text;
+
+        public ViewPlaceHolder(View v){
+
+            image = v.findViewById(R.id.imageView);
+            text = v.findViewById(R.id.textView);
+
+
+        }
+
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        //Öncıliklə layoutu çağırırıb onu bir View edib, bu adapterə inflate edirik
-        LayoutInflater layoutInflater = (LayoutInflater) context1.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View viewLayout = layoutInflater.inflate(R.layout.toast_layout,parent,false);
+        ViewPlaceHolder viewPlaceHolder = null;
+        View viewLayout= convertView;
+        if(viewLayout==null) {
+            //Öncəliklə layoutu çağırırıb onu bir View edib, bu adapterə inflate edirik
+            LayoutInflater layoutInflater = (LayoutInflater) context1.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            viewLayout = layoutInflater.inflate(R.layout.toast_layout, parent, false);
+            viewPlaceHolder = new ViewPlaceHolder(viewLayout);
+            viewLayout.setTag(viewPlaceHolder);
+        }else {
+
+            viewPlaceHolder = (ViewPlaceHolder) viewLayout.getTag();
+
+        }
+
+
 
         //və view - etdiyimiz layoutun içindəki view- ları tanımlayırıq ki içində nə var
-        TextView textColumn = viewLayout.findViewById(R.id.textView);
-        ImageView imageColumn =  viewLayout.findViewById(R.id.imageView);
+//        TextView textColumn = viewLayout.findViewById(R.id.textView);
+//        ImageView imageColumn =  viewLayout.findViewById(R.id.imageView);
 
         //daha sonra sistemdə ki, countryImage-ə position veririk bu getView - metodu nə qədər sətir varsa o qədər dövr edəcək və
         //bir bir hamısını çağıracaq məsələn position =0 olduqda 0-cı indexdə olan şəkil və yazı gələcək
-        imageColumn.setImageResource(countryImage[position]);
-        textColumn.setText(countryName[position]);
+        viewPlaceHolder.image.setImageResource(countryImage[position]);
+        viewPlaceHolder.text.setText(countryName[position]);
 
         return viewLayout;
     }
